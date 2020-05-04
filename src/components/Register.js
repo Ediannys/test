@@ -9,11 +9,26 @@ class Register extends Component {
       last_name: '',
       email: '',
       password: '',
+      checkboxes: {
+        c1: false,
+        c2: false,
+        selected: null,
+      },
       errors: {}
     }
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onCheck(name, val) {
+    const checkboxes = Object.assign({}, this.state.checkboxes, {});
+    for (let key in checkboxes) {
+      checkboxes[key] = false;
+    }
+    checkboxes[name] = true;
+    checkboxes.selected = val;
+    this.setState({ checkboxes });
   }
 
   onChange(e) {
@@ -23,10 +38,11 @@ class Register extends Component {
     e.preventDefault()
 
     const newUser = {
+      id_role: this.state.checkboxes.selected,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password, 
     }
 
     register(newUser).then(res => {
@@ -83,6 +99,24 @@ class Register extends Component {
                   placeholder="Password"
                   value={this.state.password}
                   onChange={this.onChange}
+                />
+              </div>
+
+              <div>
+                <label>Seleccionado: {this.state.checkboxes.selected}</label><br />
+                Administrador 
+                <input
+                  type="checkbox"
+                  value="1"
+                  checked={this.state.checkboxes.c1}
+                  onChange={(e) => this.onCheck('c1', e.target.value)}
+                />
+                Usuario 
+                <input
+                  type="checkbox"
+                  value="2"
+                  checked={this.state.checkboxes.c2}
+                  onChange={(e) => this.onCheck('c2', e.target.value)}
                 />
               </div>
               <button
