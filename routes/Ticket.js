@@ -4,7 +4,7 @@ const cors = require('cors')
 
 
 
-const User = require('../models/User')
+
 const Ticket = require('../models/Ticket')
 route.use(cors())
 
@@ -77,15 +77,7 @@ route.delete('/tickets/:id', (req, res) => {
     })
 })
 
-route.get('/users', (req, res) => {
-    
-    User.findAll() .then(users => {
-         res.json(users)
-        })
-        .catch(err => {
-            res.json('error: ' + err)
-        })
-})
+
 
 module.exports = route;
 
