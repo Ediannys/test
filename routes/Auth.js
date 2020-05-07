@@ -1,18 +1,18 @@
 const express = require('express')
-const route_users = express.Router()
+const route = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 
 const User = require('../models/User')
-route_users.use(cors())
+route.use(cors())
 
 
 process.env.SECRET_KEY = 'secret'
 
 
-route_users.post('/register', (req, res) => {
+route.post('/register', (req, res) => {
     const today = new Date()
     const userData = {
         id_role: req.body.id_role,
@@ -52,7 +52,7 @@ route_users.post('/register', (req, res) => {
 })
 
 
-route_users.post('/login', (req, res) => {
+route.post('/login', (req, res) => {
     User.findOne({
       where: {
         email: req.body.email
@@ -75,7 +75,7 @@ route_users.post('/login', (req, res) => {
       })
   })
 
-  route_users.get('/profile', (req, res) => {
+  route.get('/profile', (req, res) => {
     var decoded = jwt.verify(req.headers['authorization'], process.env.SECRET_KEY)
   
     User.findOne({
@@ -94,5 +94,5 @@ route_users.post('/login', (req, res) => {
         res.send('error: ' + err)
       })
   })
-module.exports = route_users;
+module.exports = route;
 

@@ -3,8 +3,8 @@ const db = require('../database/db.js')
 var User = require('./User')
 
 
-var Roles = db.sequelize.define(
-    'Roles',
+var Role = db.sequelize.define(
+    'Role',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -24,8 +24,8 @@ var Roles = db.sequelize.define(
     }
 )
 
-Roles.associate = function (models) {
-    Roles.hasMany(User, { as: 'users' })
+Role.associate = function (models) {
+    Role.hasMany(User, { as: 'users' })
 };
-module.exports = Roles
+module.exports = Role
 
