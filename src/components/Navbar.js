@@ -1,74 +1,87 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import HomeIcon from '@material-ui/icons/Home';
 
-class Landing extends Component {
-  logOut(e) {
-    e.preventDefault()
-    localStorage.removeItem('usertoken')
-    this.props.history.push(`/`)
-  }
 
-  render() {
-    const loginRegLink = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Login
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Register
-          </Link>
-        </li>
-      </ul>
-    )
 
-    const userLink = (
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link to="/profile" className="nav-link">
-            User
-          </Link>
-        </li>
-        <li className="nav-item">
-          <a href="" onClick={this.logOut.bind(this)} className="nav-link">
-            Logout
-          </a>
-        </li>
-      </ul>
-    )
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    background: '#e85380',
+    height: '80px'
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  link: {
+    textDecoration: 'inherit',
+    color: 'inherit',
+    '&:focus, &:hover, &:visited, &:link, &:active': {
+      textDecoration: 'none',
+    }},
+    menu: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+    button:{
+      marginTop:'10px'
+    }
 
-    return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarsExample10"
-          aria-controls="navbarsExample10"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
+  
 
-        <div
-          className="collapse navbar-collapse justify-content-md-center"
-          id="navbarsExample10"
-        >
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/" className="nav-link">
-                Home
-              </Link>
-            </li>
-          </ul>
-          {localStorage.usertoken ? userLink : loginRegLink}
+}));
+
+
+function Landing() {
+
+  const classes = useStyles();
+
+
+  return (
+
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar >
+          <div className={classes.menu}>
+
+            <Link className={classes.link} to="/">
+
+              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                <HomeIcon />
+              </IconButton>
+
+            </Link>
+
+
+            <Link className={classes.link} to="/login" color="inherit" >
+              <Button className={classes.button} color="inherit">Iniciar Sesión</Button>
+            </Link>
+
+          </div>
+
+
+
+
+
+        </Toolbar>
+        <div>
+
+
+
+
         </div>
-      </nav>
-    )
-  }
+      </AppBar>
+    </div>
+
+  )
 }
+
 
 export default withRouter(Landing)
