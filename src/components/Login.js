@@ -115,6 +115,15 @@ function Login() {
               margin="normal"
             />
 
+<Field name="toppingsA" component="select">
+    <option value="chicken">Chicken</option>
+    <option value="ham">Ham</option>
+    <option value="mushrooms">Mushrooms</option>
+    <option value="cheese">Cheese</option>
+    <option value="tuna">Tuna</option>
+    <option value="pineapple">Pineapple</option>
+</Field>
+
             
             <FormSpy subscription={{ submitError: true }}>
               {({ submitError }) =>
