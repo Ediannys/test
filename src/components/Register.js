@@ -38,7 +38,7 @@ class Register extends Component {
     e.preventDefault()
 
     const newUser = {
-      id_role: this.state.checkboxes.selected,
+      role_id: this.state.checkboxes.selected,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       email: this.state.email,

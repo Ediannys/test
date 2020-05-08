@@ -16,4 +16,7 @@ const sequelize = new Sequelize("test_react_node", "root","", {
 db.sequelize = sequelize
 db.Sequelize= Sequelize
 
+
+
+
 module.exports = db

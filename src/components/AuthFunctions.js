@@ -4,7 +4,7 @@ export const register = newUser => {
   console.log(newUser);
   return axios
     .post('api/auth/register', {
-      id_role: newUser.id_role,
+      role_id: newUser.role_id,
       first_name: newUser.first_name,
       last_name: newUser.last_name,
       email: newUser.email,
@@ -18,7 +18,7 @@ export const register = newUser => {
 
 export const login = user => {
   return axios
-    .post('api/auth/login', {
+    .post('api/auth/login', { 
       email: user.email,
       password: user.password
     })

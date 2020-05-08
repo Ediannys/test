@@ -24,8 +24,5 @@ var Role = db.sequelize.define(
     }
 )
 
-Role.associate = function (models) {
-    Role.hasMany(User, { as: 'users' })
-};
 module.exports = Role
 

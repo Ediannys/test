@@ -3,7 +3,6 @@ const Sequelize = require('sequelize')
 const db = require('../database/db.js').sequelize
 const User = require('../models/User')
 
-var Ticket = require('./Ticket')
 
 
 var Ticket = db.define(
@@ -14,7 +13,7 @@ var Ticket = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    id_user: {
+    user_id: {
       type: Sequelize.INTEGER,
       references: {
         model: User,
@@ -36,9 +35,6 @@ var Ticket = db.define(
     timestamps: false
   },
 )
-Ticket.associate = function (models) {
-    Ticket.hasMany(User, { as: 'users' })
-};
 
 module.exports = Ticket
 

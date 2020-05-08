@@ -4,6 +4,7 @@ const db = require('../database/db.js').sequelize
 var Role = require('./Role')
 
 
+
 var User = db.define(
   'User',
   {
@@ -12,7 +13,7 @@ var User = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    id_role: {
+    role_id: {
       type: Sequelize.INTEGER,
       references: {
         model: Role,
@@ -40,13 +41,7 @@ var User = db.define(
     timestamps: false
   },
 )
-User.associate = function (models) {
-  User.belongsTo(Role, { foreignKey: 'id_role', as: 'role' });
-};
 
-User.associate = function (models) {
-  User.belongsTo(Ticket, { foreignKey: 'id_user', as: 'user' });
-};
 
 module.exports = User
 

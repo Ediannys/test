@@ -1,11 +1,15 @@
 const express = require('express')
 const route = express.Router()
 const cors = require('cors')
+const Sequelize = require('sequelize')
+const { QueryTypes } = require('sequelize');
 
 
 
-
+const db = require('../database/db.js')
 const Ticket = require('../models/Ticket')
+const User = require('../models/User')
+
 route.use(cors())
 
 
@@ -16,7 +20,7 @@ process.env.SECRET_KEY = 'secret'
 route.post('/tickets', (req, res) => {
     const today = new Date()
     const ticketData = {
-        id_user: req.body.id_user,
+        user_id: req.body.user_id,
         issue: req.body.issue,
         requested_ticket: req.body.requested_ticket,
         created: today
@@ -48,13 +52,23 @@ route.get('/tickets/:id', (req, res) => {
       })
 })
 
-route.put('/tickets/:id', (req, res) => {
+route.get('/all_user_tickets', (req, res) => {
+    
+    db.sequelize.query("SELECT * FROM users INNER JOIN tickets ON users.id = tickets.user_id", { type: QueryTypes.SELECT }).then(tickets => {
+        res.json(tickets)
+       })
+       .catch(err => {
+           res.json('error: ' + err)
+       });
+})
 
+route.put('/tickets/:id', (req, res) => {
+    const today = new Date()
     const ticketData = {
-        id_user: req.body.id_user,
+        user_id: req.body.user_id,
         issue: req.body.issue,
         requested_ticket: req.body.requested_ticket,
-        created: req.body.today
+        created: today
     }
     Ticket.update(ticketData, { where: {id: req.params.id} })
     .then(() => {
@@ -80,4 +94,3 @@ route.delete('/tickets/:id', (req, res) => {
 
 
 module.exports = route;
-

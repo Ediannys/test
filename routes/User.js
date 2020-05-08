@@ -21,7 +21,7 @@ route.get('/users/tickets/:id', (req, res) => {
     
     Ticket.findAll({
         where:{
-            id_user: req.params.id
+            user_id: req.params.id
         }
     }).then(tickets => {
         res.json(tickets);
