@@ -2,20 +2,22 @@ import React, { Component } from 'react'
 import { login } from './AuthFunctions'
 import { Field, Form, FormSpy } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
 import { email, required } from './form/validation';
+import { useHistory } from "react-router-dom";
+
+import Link from '@material-ui/core/Link';
 import RFTextField from './form/RFTextField';
 import FormButton from './form/FormButton';
 import FormFeedback from './form/FormFeedback';
 import Typography from '@material-ui/core/Typography';
 
 
+
 const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: theme.spacing(6),
     padding: '50px 20%',
-    background: '#fff5f8'
-    
+    background: '#fff5f8' 
   },
   button: {
     marginTop: theme.spacing(3),
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   divSigIn:{
-    padding: '0 20%',
+    padding: '0 25%',
   }
 
 }));
@@ -34,6 +36,8 @@ function Login() {
 
   const classes = useStyles();
   const [disabled, setDisabled] = React.useState(true);
+  let history = useHistory();
+
 
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
@@ -51,9 +55,18 @@ function Login() {
     return errors;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (values) => {
+
+    const user = {
+      email: values.email,
+      password: values.password
+    }
     
+    login(user).then(res=>{
+      if(res){
+        history.push("/profile");
+      }
+    })
 
   };
 
@@ -61,12 +74,21 @@ function Login() {
 
     <div className={classes.divSigIn}>
       <Form onSubmit={handleSubmit} subscription={{ submitting: true }} validate={validate}  >
-        {({ handleSubmit2, submitting }) => (
+        {({ handleSubmit, values, submitting }) => (
 
 
-          <form onSubmit={handleSubmit2} className={classes.form}>
+          <form onSubmit={handleSubmit} className={classes.form}>
             <Typography variant="h4" gutterBottom marked="center" align="center">
             Iniciar Sesión
+            
+          </Typography>
+          
+
+          <Typography variant="body2" align="center">
+            {'¿ No tienes una cuenta? '}
+            <Link href="/register" align="center" underline="always">
+              Regístrate
+            </Link>
           </Typography>
             <Field
               autoComplete="email"
@@ -92,6 +114,8 @@ function Login() {
               type="password"
               margin="normal"
             />
+
+            
             <FormSpy subscription={{ submitError: true }}>
               {({ submitError }) =>
                 submitError ? (
