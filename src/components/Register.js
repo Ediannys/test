@@ -1,136 +1,170 @@
 import React, { Component } from 'react'
 import { register } from './AuthFunctions'
+import { Field, Form, FormSpy } from 'react-final-form';
+import { makeStyles } from '@material-ui/core/styles';
+import { email, required } from './form/validation';
+import { useHistory } from "react-router-dom";
 
-class Register extends Component {
-  constructor() {
-    super()
-    this.state = {
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      checkboxes: {
-        c1: false,
-        c2: false,
-        selected: null,
-      },
-      errors: {}
-    }
+import Link from '@material-ui/core/Link';
+import RFTextField from './form/RFTextField';
+import FormButton from './form/FormButton';
+import FormFeedback from './form/FormFeedback';
+import Typography from '@material-ui/core/Typography';
 
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    marginTop: theme.spacing(6),
+    padding: '50px 20%',
+    background: '#fff5f8' 
+  },
+  button: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+  },
+  feedback: {
+    marginTop: theme.spacing(2),
+  },
+  divSigIn:{
+    padding: '0 25%',
+  },
+  divLogin:{
+    marginBottom: '2em',
   }
 
-  onCheck(name, val) {
-    const checkboxes = Object.assign({}, this.state.checkboxes, {});
-    for (let key in checkboxes) {
-      checkboxes[key] = false;
-    }
-    checkboxes[name] = true;
-    checkboxes.selected = val;
-    this.setState({ checkboxes });
-  }
+}));
 
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value })
-  }
-  onSubmit(e) {
-    e.preventDefault()
+function Register() {
 
-    const newUser = {
-      role_id: this.state.checkboxes.selected,
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      email: this.state.email,
-      password: this.state.password, 
+  const classes = useStyles();
+  const [disabled, setDisabled] = React.useState(true);
+  let history = useHistory();
+
+
+  const validate = (values) => {
+    const errors =required(['firstName', 'lastName', 'email', 'password'], values);
+    if (!errors.email) {
+      const emailError = email(values.email, values);
+      if (emailError) {
+        errors.email = email(values.email, values);
+        console.log('entro');
+        setDisabled(true);
+      }
+      else setDisabled(false);
+
     }
 
-    register(newUser).then(res => {
-      this.props.history.push(`/login`)
+    return errors;
+  };
+
+  const handleSubmit = (values) => {
+
+    const user = {
+      first_name:values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      password: values.password
+    }
+    
+    register(user).then(res=>{
+      if(res){
+        history.push("/register");
+      }
     })
-  }
 
-  render() {
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 mt-5 mx-auto">
-            <form noValidate onSubmit={this.onSubmit}>
-              <h1 className="h3 mb-3 font-weight-normal">Register</h1>
-              <div className="form-group">
-                <label htmlFor="name">First name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="first_name"
-                  placeholder="Enter your first name"
-                  value={this.state.first_name}
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="name">Last name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="last_name"
-                  placeholder="Enter your lastname name"
-                  value={this.state.last_name}
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  placeholder="Enter email"
-                  value={this.state.email}
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                />
-              </div>
+  };
 
-              <div>
-                <label>Seleccionado: {this.state.checkboxes.selected}</label><br />
-                Administrador 
-                <input
-                  type="checkbox"
-                  value="1"
-                  checked={this.state.checkboxes.c1}
-                  onChange={(e) => this.onCheck('c1', e.target.value)}
-                />
-                Usuario 
-                <input
-                  type="checkbox"
-                  value="2"
-                  checked={this.state.checkboxes.c2}
-                  onChange={(e) => this.onCheck('c2', e.target.value)}
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-lg btn-primary btn-block"
-              >
-                Register!
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  return (
+
+    <div className={classes.divSigIn}>
+      <Form onSubmit={handleSubmit} subscription={{ submitting: true }} validate={validate}  >
+        {({ handleSubmit, values, submitting }) => (
+
+
+          <form onSubmit={handleSubmit} className={classes.form}>
+            <Typography variant="h4" gutterBottom marked="center" align="center">
+            Registrarse
+            
+          </Typography>
+          
+
+          <Typography className={classes.divLogin} variant="body2" align="center">
+            {'¿Tienes una cuenta? '}
+            <Link href="/register" align="center" underline="always">
+              Inciar Sesión
+            </Link>
+          </Typography>
+          <Field
+                    autoFocus
+                    component={RFTextField}
+                    autoComplete="fname"
+                    fullWidth
+                    label="First name"
+                    name="firstName"
+                    required
+                  />
+                  <Field
+                    component={RFTextField}
+                    autoComplete="lname"
+                    fullWidth
+                    label="Last name"
+                    name="lastName"
+                    required
+                  />
+            <Field
+              autoComplete="email"
+              autoFocus
+              component={RFTextField}
+              disabled={submitting}
+              fullWidth
+              label="Email"
+              margin="normal"
+              name="email"
+              required
+              size="large"
+            />
+            <Field
+              fullWidth
+              size="large"
+              component={RFTextField}
+              disabled={submitting}
+              required
+              name="password"
+              autoComplete="current-password"
+              label="Password"
+              type="password"
+              margin="normal"
+            />
+            
+            <FormSpy subscription={{ submitError: true }}>
+              {({ submitError }) =>
+                submitError ? (
+                  <FormFeedback className={classes.feedback} error>
+                    {submitError}
+                  </FormFeedback>
+                ) : null
+              }
+            </FormSpy>
+            <FormButton
+              className={classes.button}
+              disabled={ (submitting==false) ^ !disabled }
+              size="large"
+              color="secondary"
+              fullWidth
+            >
+              Ingresar
+              </FormButton>
+          </form>
+        )}
+      </Form>
+    </div>
+
+  )
 }
+
+
+
+
 
 export default Register
