@@ -52,7 +52,7 @@ function Home()  {
         Test
       </Typography>
       <Typography color="inherit" align="center" variant="h5" className={classes.h5}>
-        Prueba de React Js con Node Js
+        React Js con Node Js
       </Typography>
       <Button
         color="secondary"

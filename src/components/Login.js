@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import jwt_decode from 'jwt-decode'
 import { login } from './AuthFunctions'
 import { Field, Form, FormSpy } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
 import { email, required } from './form/validation';
 import { useHistory } from "react-router-dom";
-
 import Link from '@material-ui/core/Link';
 import RFTextField from './form/RFTextField';
 import FormButton from './form/FormButton';
@@ -39,6 +39,8 @@ function Login() {
   let history = useHistory();
 
 
+
+
   const validate = (values) => {
     const errors = required(['email', 'password'], values);
     if (!errors.email) {
@@ -64,7 +66,11 @@ function Login() {
     
     login(user).then(res=>{
       if(res){
-        history.push("/profile-user");
+        localStorage.setItem('isAuthenticated',true)
+        let decoded = jwt_decode(res)
+        localStorage.setItem('rol', decoded.role_id)
+        if(decoded.role_id == 2)history.push("/profile-user");
+        else history.push("/profile-admin");
       }
     })
 

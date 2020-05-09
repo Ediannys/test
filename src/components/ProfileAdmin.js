@@ -15,6 +15,7 @@ import { updateTicket } from './TicketFunctions'
 import { getAllUserTickets } from './TicketFunctions'
 import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from "react-router-dom";
 
 
 import Fab from '@material-ui/core/Fab';
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) =>({
     marginRight: theme.spacing(1),
   },
   divTable:{
-    width: '70%',
+    width: '80%',
     margin: 'auto'
   },
   formControl: {
@@ -100,6 +101,10 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 function ProfileAdmin() {
+
+let history = useHistory();
+
+if(localStorage.getItem('rol')!= 1) history.push("/profile-user");
 
 const classes = useStyles();
 const [rows, setRows] = React.useState([])

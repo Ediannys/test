@@ -27,7 +27,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import { useHistory } from "react-router-dom";
 
 
 
@@ -79,6 +79,10 @@ const useStyles = makeStyles((theme) =>({
 
 function Profile() {
 
+let history = useHistory();
+
+if(localStorage.getItem('rol')!= 2) history.push("/profile-admin");
+
 const classes = useStyles();
 const [rows, setRows] = React.useState([])
 const [open, setOpen] = React.useState(false);
@@ -107,7 +111,7 @@ React.useEffect(() => {
 
     async function userTickets() {
         getUserTickets(user.id).then(tickets => {
-          if(tickets.length == 0) setShowMessage('block')
+          if(tickets == []) setShowMessage('block')
             console.log(tickets);
             setRows(tickets)
         })
@@ -177,7 +181,7 @@ const handleChangeIssue = (event) => {
   return (
     <div>
   <Typography className={classes.header} variant="h4" gutterBottom marked="left" align="left">
-          Tickets  {user.id}
+          Tickets 
       </Typography>
   <div className={classes.divTable}>
     <TableContainer component={Paper}>

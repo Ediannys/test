@@ -93,7 +93,7 @@ function Register() {
 
           <Typography className={classes.divLogin} variant="body2" align="center">
             {'¿Tienes una cuenta? '}
-            <Link href="/register" align="center" underline="always">
+            <Link href="/login" align="center" underline="always">
               Inciar Sesión
             </Link>
           </Typography>

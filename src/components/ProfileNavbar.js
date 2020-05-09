@@ -58,6 +58,8 @@ let history = useHistory();
 
   const handleLogOut = () => {
     localStorage.removeItem('usertoken')
+    localStorage.removeItem('isAuthenticated')
+    localStorage.removeItem('role')
     history.push("/");
 
 };
