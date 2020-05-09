@@ -8,7 +8,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { createTicket } from './TicketFunctions'
 import { getAllUserTickets } from './TicketFunctions'
+import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
 
 
@@ -73,17 +75,30 @@ const useStyles = makeStyles((theme) =>({
 function Profile() {
   const classes = useStyles();
   const [rows, setRows] = React.useState([])
+  const [open, setOpen] = React.useState(false);
+  const [users, setUsers] = React.useState([]);
+  const [issue, setIssue] = React.useState('');
+  const [userId, setUserId] = React.useState('');
 
   React.useEffect(() => {
-    getAllUserTickets().then(tickets => {
+
+    allUserTickets()
+
+     async function allUserTickets() {
+       getAllUserTickets().then(tickets => {
 
       console.log(tickets);
       setRows(tickets)
     })
+  }
 
-  }, []);
+    getUsers().then(users=>{
+      setUsers(users)
+    })
 
-  const [open, setOpen] = React.useState(false);
+  }, [open]);
+
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -93,10 +108,30 @@ function Profile() {
     setOpen(false);
   };
 
-  const [age, setAge] = React.useState('');
+  const handleCreateTicket = () => {
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+    const ticket= {
+      issue: issue,
+      user_id: userId
+    }
+
+    createTicket(ticket)
+    setUserId('')
+    setIssue('')
+    setOpen(false);
+
+    
+    
+  };
+
+ 
+
+  const handleChangeUserId = (event) => {
+    setUserId(event.target.value);
+  };
+
+  const handleChangeIssue = (event) => {
+    setIssue(event.target.value);
   };
 
 
@@ -109,7 +144,7 @@ function Profile() {
 
 
       <Typography className={classes.header} variant="h4" gutterBottom marked="left" align="left">
-          Gestionar Usuarios
+          Gestionar Tickets
             
       </Typography>
 
@@ -160,22 +195,24 @@ function Profile() {
               autoFocus
               margin="dense"
               id="issue"
+              value={issue}
+              onChange={handleChangeIssue}
               label="Asunto"
               type="text"
               fullWidth
             />
           </DialogContent>
           <div>
-          <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
-            onChange={handleChange}
+            value={userId}
+            onChange={handleChangeUserId}
             className={classes.selectEmpty}>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {users.map((user) => (
+              <MenuItem value={user.id}>{user.first_name} {user.last_name}</MenuItem>
+            ))}
           </Select>
 
           </div>
@@ -187,7 +224,7 @@ function Profile() {
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleCreateTicket} color="primary">
             Agregar
           </Button>
         </DialogActions>
