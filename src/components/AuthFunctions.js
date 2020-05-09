@@ -12,7 +12,7 @@ export const register = newUser => {
       
     })
     .then(response => {
-      console.log('Registered')
+      return response.data
     })
 }
 

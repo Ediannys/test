@@ -69,7 +69,7 @@ function Register() {
     
     register(user).then(res=>{
       if(res){
-        history.push("/register");
+        history.push("/login");
       }
     })
 
@@ -153,7 +153,7 @@ function Register() {
               color="secondary"
               fullWidth
             >
-              Ingresar
+              Registrarse
               </FormButton>
           </form>
         )}
