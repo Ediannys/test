@@ -30,6 +30,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 
+
 const useStyles = makeStyles((theme) =>({
   table: {
     minWidth: 650,
@@ -86,13 +87,23 @@ const [issue, setIssue] = React.useState('');
 const [userId, setUserId] = React.useState('');
 const [ticketId, setTicketId] = React.useState('');
 const [update, setUpdate] = React.useState(0);
+const token = localStorage.usertoken
+const decoded = jwt_decode(token)
+
+const [user, setUser] = React.useState({
+  id:decoded.id,
+  first_name: decoded.first_name,
+  last_name: decoded.last_name,
+  email: decoded.email
+}
+);
 
 React.useEffect(() => {
 
     userTickets()
 
     async function userTickets() {
-        getUserTickets(2).then(tickets => {
+        getUserTickets(user.id).then(tickets => {
 
             console.log(tickets);
             setRows(tickets)
@@ -125,7 +136,7 @@ const handleCreateTicket = () => {
 
     const ticket = {
         issue: issue,
-        user_id: userId
+        user_id: user.id
     }
 
     createTicket(ticket)
@@ -162,7 +173,7 @@ const handleChangeIssue = (event) => {
   return (
     <div>
   <Typography className={classes.header} variant="h4" gutterBottom marked="left" align="left">
-          Tickets  
+          Tickets  {user.id}
       </Typography>
   <div className={classes.divTable}>
     <TableContainer component={Paper}>

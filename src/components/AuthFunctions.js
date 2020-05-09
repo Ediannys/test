@@ -4,7 +4,7 @@ export const register = newUser => {
   console.log(newUser);
   return axios
     .post('api/auth/register', {
-      role_id: newUser.role_id,
+      role_id: 2,
       first_name: newUser.first_name,
       last_name: newUser.last_name,
       email: newUser.email,
