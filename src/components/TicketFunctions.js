@@ -6,7 +6,7 @@ export const createTicket = newTicket => {
     .post('api/tickets', {
       user_id: newTicket.user_id,
       issue: newTicket.issue,
-      requested_ticket: 0, 
+      status: 0, 
     })
     .then(response => {
       console.log('Ticket Guardado')
@@ -52,6 +52,18 @@ export const getTicket = id => {
       .get('api/user_tickets/'+id)
       .then(response => {
         return response.data
+      }).catch(err => {
+        console.log(err)
+      })
+  }
+
+  export const updateStatusTicket = ticket => {
+    return axios
+      .put('api/ticket_status/'+ ticket.id, {
+        status:  ticket.status
+      })
+      .then(response => {
+        console.log('Ticket actualizado')
       }).catch(err => {
         console.log(err)
       })

@@ -23,7 +23,7 @@ var Ticket = db.define(
     issue: {
       type: Sequelize.STRING
     },
-    requested_ticket: {
+    status: {
         type: Sequelize.INTEGER,
       },
     created: {

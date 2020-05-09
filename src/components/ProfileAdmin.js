@@ -232,7 +232,7 @@ const handleChangeIssue = (event) => {
             <TableCell>{row.last_name}</TableCell>
             <TableCell>{row.created}</TableCell>
             <TableCell>
-                  {row.requested_ticket ? 
+                  {row.status ? 
               <span className={classes.statusFalse}>Pendiente</span> : 
               <span className={classes.statusTrue}>Recibido</span>}
 

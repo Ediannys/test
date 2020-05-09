@@ -22,7 +22,7 @@ route.post('/tickets', (req, res) => {
     const ticketData = {
         user_id: req.body.user_id,
         issue: req.body.issue,
-        requested_ticket: req.body.requested_ticket,
+        status: req.body.status,
         created: today
     }
     
@@ -84,6 +84,20 @@ route.put('/tickets/:id', (req, res) => {
         created: today
     }
     
+    Ticket.update(ticketData, { where: {id: id} })
+    .then(() => {
+        res.json({ message:' Ticket actualizado!' })
+    })
+    .catch(err => {
+        res.send('error: ' + err)
+    })
+})
+
+route.put('/ticket_status/:id', (req, res) => {
+    const id = req.params.id
+    const ticketData = {
+        status: req.body.status,
+    }
     Ticket.update(ticketData, { where: {id: id} })
     .then(() => {
         res.json({ message:' Ticket actualizado!' })

@@ -11,10 +11,11 @@ import Paper from '@material-ui/core/Paper';
 import { createTicket } from './TicketFunctions'
 import { getTicket } from './TicketFunctions'
 import { removeTicket } from './TicketFunctions'
-import { updateTicket } from './TicketFunctions'
+import { updateStatusTicket } from './TicketFunctions'
 import { getUserTickets } from './TicketFunctions'
 import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 
 
 import Fab from '@material-ui/core/Fab';
@@ -57,14 +58,20 @@ const useStyles = makeStyles((theme) =>({
     margin: theme.spacing(1),
   },
   statusTrue:{
-    background: '#34a53494',
+    backgroundColor: '#34a53494',
     color: 'white',
     padding: '3px',
+    '&:hover, &:focus':{
+      backgroundColor: '#34a53494',
+    }
   },
   statusFalse:{
-    background: '#f44336',
+    backgroundColor: '#f44336',
     color: 'white',
     padding: '3px',
+    '&:hover, &:focus':{
+      backgroundColor: '#f44336',
+    }
   }
 }));
 
@@ -126,6 +133,22 @@ const handleCreateTicket = () => {
     setUpdate(update + 1);
 };
 
+const handleChangeStatus = (id, status) => {
+ 
+  console.log(id );
+  if(status==1) status=0;
+  else status=1;
+
+  const ticket = {
+    id: id,
+    status: status
+}
+  
+  updateStatusTicket(ticket)
+    setValues()
+    setUpdate(update + 1);
+};
+
 
 const handleChangeUserId = (event) => {
     setUserId(event.target.value);
@@ -163,9 +186,10 @@ const handleChangeIssue = (event) => {
             <TableCell>{row.issue}</TableCell>
             <TableCell>{row.created}</TableCell>
             <TableCell>
-                  {row.requested_ticket ? 
-              <span className={classes.statusFalse}>Pendiente</span> : 
-              <span className={classes.statusTrue}>Recibido</span>}
+                  {row.status ? 
+              <Chip  onClick={()=>handleChangeStatus(row.id, row.status)} label="Pendiente" className={classes.statusFalse} /> : 
+              <Chip  onClick={()=>handleChangeStatus(row.id, row.status)} label="Recibido" className={classes.statusTrue} />
+              }
 
             </TableCell>
           </TableRow>
