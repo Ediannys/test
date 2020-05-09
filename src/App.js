@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import HomeComponent from './components/HomeComponent'
+import LoginComponent from './components/LoginComponent'
+import RegisterComponent from './components/RegisterComponent'
+import UserComponent from './components/UserComponent'
+import AdminComponent from './components/AdminComponent'
 
-import Navbar from './components/Navbar'
-import Landing from './components/Landing'
-import Login from './components/Login'
-import Register from './components/Register'
-import Profile from './components/Profile'
+import ProfileAdmin from './components/ProfileAdmin'
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
-          <Navbar />
-          <Route exact path="/" component={Landing} />
+          <Route exact path="/" component={HomeComponent} />
           <div className="container">
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/register" component={RegisterComponent} />
+            <Route exact path="/login" component={LoginComponent} />
+            <Route exact path="/profile-user" component={UserComponent} />
+            <Route exact path="/profile-admin" component={AdminComponent} />
           </div>
         </div>
       </Router>

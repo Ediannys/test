@@ -16,6 +16,7 @@ import { getUserTickets } from './TicketFunctions'
 import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 
 
 import Fab from '@material-ui/core/Fab';
@@ -82,6 +83,7 @@ const classes = useStyles();
 const [rows, setRows] = React.useState([])
 const [open, setOpen] = React.useState(false);
 const [openEdit, setOpenEdit] = React.useState(false);
+const [showMessage, setShowMessage] = React.useState('none');
 const [users, setUsers] = React.useState([]);
 const [issue, setIssue] = React.useState('');
 const [userId, setUserId] = React.useState('');
@@ -89,6 +91,7 @@ const [ticketId, setTicketId] = React.useState('');
 const [update, setUpdate] = React.useState(0);
 const token = localStorage.usertoken
 const decoded = jwt_decode(token)
+
 
 const [user, setUser] = React.useState({
   id:decoded.id,
@@ -104,7 +107,7 @@ React.useEffect(() => {
 
     async function userTickets() {
         getUserTickets(user.id).then(tickets => {
-
+          if(tickets.length == 0) setShowMessage('block')
             console.log(tickets);
             setRows(tickets)
         })
@@ -138,10 +141,11 @@ const handleCreateTicket = () => {
         issue: issue,
         user_id: user.id
     }
-
+    setShowMessage('none')
     createTicket(ticket)
     setValues()
     setUpdate(update + 1);
+
 };
 
 const handleChangeStatus = (id, status) => {
@@ -191,6 +195,11 @@ const handleChangeIssue = (event) => {
           </TableRow>
         </TableHead>
         <TableBody>
+
+        <Typography  style={{display: showMessage}}variant="p" gutterBottom marked="center" align="center">
+          Agrega un ticket   <InsertEmoticonIcon style={{top: '6px', position:'relative'}}/>
+        </Typography>
+
             {rows.map((row) => (
               
           <TableRow key={row.id}>

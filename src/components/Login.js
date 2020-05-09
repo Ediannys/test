@@ -64,7 +64,7 @@ function Login() {
     
     login(user).then(res=>{
       if(res){
-        history.push("/profile");
+        history.push("/profile-user");
       }
     })
 

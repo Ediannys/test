@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 
 
 
+
+
 const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: theme.spacing(6),
@@ -76,7 +78,7 @@ function Register() {
   };
 
   return (
-
+    
     <div className={classes.divSigIn}>
       <Form onSubmit={handleSubmit} subscription={{ submitting: true }} validate={validate}  >
         {({ handleSubmit, values, submitting }) => (
