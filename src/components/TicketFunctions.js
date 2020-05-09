@@ -47,6 +47,17 @@ export const getTicket = id => {
   }
 
 
+  export const getUserTickets = id => {
+    return axios
+      .get('api/user_tickets/'+id)
+      .then(response => {
+        return response.data
+      }).catch(err => {
+        console.log(err)
+      })
+  }
+
+
   export const updateTicket = ticket => {
     return axios
       .put('api/tickets/'+ ticket.id, {

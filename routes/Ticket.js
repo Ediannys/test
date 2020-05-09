@@ -62,6 +62,19 @@ route.get('/all_user_tickets', (req, res) => {
        });
 })
 
+route.get('/user_tickets/:id', (req, res) => {
+    
+    const id = req.params.id
+
+    Ticket.findAll({ where: {user_id: id} })
+    .then((tickets) => {
+        res.json(tickets)
+    })
+    .catch(err => {
+        res.send('error: ' + err)
+    })
+})
+
 route.put('/tickets/:id', (req, res) => {
     const today = new Date()
     const id = req.params.id
