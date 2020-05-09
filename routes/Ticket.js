@@ -64,13 +64,14 @@ route.get('/all_user_tickets', (req, res) => {
 
 route.put('/tickets/:id', (req, res) => {
     const today = new Date()
+    const id = req.params.id
     const ticketData = {
         user_id: req.body.user_id,
         issue: req.body.issue,
-        requested_ticket: req.body.requested_ticket,
         created: today
     }
-    Ticket.update(ticketData, { where: {id: req.params.id} })
+    
+    Ticket.update(ticketData, { where: {id: id} })
     .then(() => {
         res.json({ message:' Ticket actualizado!' })
     })

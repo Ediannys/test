@@ -47,15 +47,14 @@ export const getTicket = id => {
   }
 
 
-  export const updateTicket = updatedTicket => {
+  export const updateTicket = ticket => {
     return axios
-      .update('api/tickets'+ updatedTicket.id, {
-        user_id: updatedTicket.user_id,
-        issue: updatedTicket.issue,
-        requested_ticket: updatedTicket.requested_ticket, 
+      .put('api/tickets/'+ ticket.id, {
+        user_id: ticket.user_id,
+        issue: ticket.issue, 
       })
       .then(response => {
-        console.log('Ticket Actualizado')
+        console.log(response)
       }).catch(err => {
         console.log(err)
       })

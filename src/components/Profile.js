@@ -9,6 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { createTicket } from './TicketFunctions'
+import { getTicket } from './TicketFunctions'
+import { removeTicket } from './TicketFunctions'
+import { updateTicket } from './TicketFunctions'
 import { getAllUserTickets } from './TicketFunctions'
 import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
@@ -33,6 +36,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 
 const useStyles = makeStyles((theme) =>({
@@ -70,15 +77,38 @@ const useStyles = makeStyles((theme) =>({
     width: '58%',
     marginLeft: '26px'
   },
+  divIcon:{
+    position:'relative',
+    left:'35px'
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+  statusTrue:{
+    background: '#34a53494',
+    color: 'white',
+    padding: '3px',
+  },
+  statusFalse:{
+    background: '#f44336',
+    color: 'white',
+    padding: '3px',
+  }
 }));
 
 function Profile() {
   const classes = useStyles();
   const [rows, setRows] = React.useState([])
   const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const [users, setUsers] = React.useState([]);
   const [issue, setIssue] = React.useState('');
   const [userId, setUserId] = React.useState('');
+  const [ticketId, setTicketId] = React.useState('');
+  const [update, setUpdate] = React.useState(0);
 
   React.useEffect(() => {
 
@@ -96,16 +126,37 @@ function Profile() {
       setUsers(users)
     })
 
-  }, [open]);
+  }, [update]);
 
-  
+  const setValues = ()=>{
+
+    setUserId('')
+    setIssue('')
+    setOpen(false);
+    setOpenEdit(false);
+
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+
+  const handleClickOpenEdit = (id) => {
+    setOpenEdit(true);
+    getTicket(id).then(ticket=>{
+      setTicketId(id)
+      setIssue(ticket.issue)
+      setUserId(ticket.user_id)
+    })
+  };
+
   const handleClose = () => {
-    setOpen(false);
+    setValues() 
+  };
+
+  const handleCloseEdit = () => { 
+    setValues() 
   };
 
   const handleCreateTicket = () => {
@@ -116,16 +167,31 @@ function Profile() {
     }
 
     createTicket(ticket)
-    setUserId('')
-    setIssue('')
-    setOpen(false);
+    setValues()
+    setUpdate(update+1);
+  };
 
-    
-    
+  const handleRemoveTicket = (id) => {
+    removeTicket(id)
+    setOpen(false)
+    setUpdate(update+2); 
+  };
+
+  const handleEditTicket = (id) => {
+
+    const ticket= {
+      id: ticketId,
+      issue: issue,
+      user_id: userId
+    }
+    console.log(ticket)
+    updateTicket(ticket)
+    setValues()
+    setUpdate(update+3);
+
   };
 
  
-
   const handleChangeUserId = (event) => {
     setUserId(event.target.value);
   };
@@ -179,7 +245,18 @@ function Profile() {
                 <TableCell>{row.first_name}</TableCell>
                 <TableCell>{row.last_name}</TableCell>
                 <TableCell>{row.created}</TableCell>
-                <TableCell>{row.requested_ticket}
+                <TableCell>
+                  {row.requested_ticket ? <span className={classes.statusFalse}>Pendiente</span> : <span className={classes.statusTrue}>Recibido</span>}
+
+                  <span className={classes.divIcon}>
+                  <IconButton aria-label="delete" className={classes.margin} size="small" onClick={()=>handleRemoveTicket(row.id)}>
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                  <IconButton aria-label="edit" className={classes.margin} size="small" onClick={()=>handleClickOpenEdit(row.id)}>
+                    <EditIcon fontSize="inherit" />
+                  </IconButton>
+                  </span>
+                 
                 </TableCell>
               </TableRow>
             ))}
@@ -226,6 +303,51 @@ function Profile() {
           </Button>
           <Button onClick={handleCreateTicket} color="primary">
             Agregar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+      
+      <Dialog open={openEdit} onClose={handleCloseEdit} aria-labelledby="form-dialog-title" fullWidth="600px">
+       
+          <DialogTitle id="form-dialog-title">Editar Ticket</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="issue"
+              value={issue}
+              onChange={handleChangeIssue}
+              label="Asunto"
+              type="text"
+              fullWidth
+            />
+          </DialogContent>
+          <div>
+          <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={userId}
+            onChange={handleChangeUserId}
+            className={classes.selectEmpty}>
+            {users.map((user) => (
+              <MenuItem value={user.id}>{user.first_name} {user.last_name}</MenuItem>
+            ))}
+          </Select>
+
+          </div>
+         
+         
+        
+        
+        <DialogActions>
+          <Button onClick={handleCloseEdit} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleEditTicket} color="primary">
+            Actualizar
           </Button>
         </DialogActions>
       </Dialog>
