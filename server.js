@@ -9,12 +9,12 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(bodyParser.urlencoded({extended: false })) 
 
-var Auth= require('./routes/Auth')
-var Ticket= require('./routes/Ticket')
-var User= require('./routes/User')
-app.use('/api/auth', Auth)
-app.use('/api', Ticket)
-app.use('/api', User)
+var authRoutes= require('./routes/Auth')
+var ticketRoutes= require('./routes/Ticket')
+var userRoutes= require('./routes/User')
+app.use('/api/auth', authRoutes)
+app.use('/api', ticketRoutes)
+app.use('/api', userRoutes)
 
 app.listen(port, function(){
     console.log("Server is running on port: "+port)

@@ -35,8 +35,8 @@ class App extends Component {
           <div className="container">
             <Route exact path="/register" component={RegisterComponent} />
             <Route exact path="/login" component={LoginComponent} />
-            <PrivateRoute exact path="/profile-user" component={UserComponent} />
-            <PrivateRoute  exact path="/profile-admin" component={AdminComponent} />
+            <Route exact path="/profile-user" component={UserComponent} />
+            <Route  exact path="/profile-admin" component={AdminComponent} />
           </div>
         </div>
         </Switch>

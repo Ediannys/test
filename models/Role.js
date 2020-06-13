@@ -1,28 +1,27 @@
-const Sequelize = require('sequelize')
-const db = require('../database/db.js')
-var User = require('./User')
+'use strict'
 
-
-var Role = db.sequelize.define(
-    'Role',
-    {
+module.exports = (sequelize, DataTypes) => {
+    const Role = sequelize.define('role', {
         id: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
             autoIncrement: true
         },
         name: {
-            type: Sequelize.STRING
-        },
-        created: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW
+            type: DataTypes.STRING
+        }, created: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
         }
     },
-    {
-        timestamps: false
-    }
-)
+        {
+            timestamps: false
+        },
+        {
+            underscored: true
+        });
+    return Role;
+};
 
-module.exports = Role
+
 

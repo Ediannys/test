@@ -1,42 +1,36 @@
-const Sequelize = require('sequelize')
+'use strict'
 
-const db = require('../database/db.js').sequelize
-const User = require('../models/User')
-
-
-
-var Ticket = db.define(
-  'Ticket',
-  {
+module.exports = (sequelize, DataTypes) => {
+  const Ticket = sequelize.define('ticket', {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
       autoIncrement: true
     },
     user_id: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: User,
-        key: 'id'
-      }
+      type: DataTypes.UUID,
+      required: true,
+      allowNull: false
     },
     issue: {
-      type: Sequelize.STRING
+      type: DataTypes.STRING
     },
     status: {
-        type: Sequelize.INTEGER,
-      },
+      type: DataTypes.UUID,
+    },
     created: {
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
   },
-  {
-    timestamps: false
-  },
-)
-
-module.exports = Ticket
+    {
+      timestamps: false
+    },
+    {
+      underscored: true
+    });
+  return Ticket;
+};
 
 
 
