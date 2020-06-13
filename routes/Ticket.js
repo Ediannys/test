@@ -2,15 +2,9 @@ const express = require('express')
 const route = express.Router()
 const cors = require('cors')
 const Sequelize = require('sequelize')
-const {
-	QueryTypes
-} = require('sequelize');
-
 
 const db = require('../database/db.js')
 route.use(cors())
-
-
 process.env.SECRET_KEY = 'secret'
 
 
