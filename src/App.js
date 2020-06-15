@@ -1,48 +1,18 @@
-import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import HomeComponent from './components/HomeComponent'
-import LoginComponent from './components/LoginComponent'
-import RegisterComponent from './components/RegisterComponent'
-import UserComponent from './components/UserComponent'
-import AdminComponent from './components/AdminComponent'
-
-import ProfileAdmin from './components/ProfileAdmin'
-import { isAuthenticated } from "./components/auth";
+import React,{ Fragment} from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import  AuthRoute from './components/routing/AuthRoute';
+import  ProfileRoute from './components/routing/ProfileRoute';
 
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-      )
-    }
-  />
-);
+const App = () => {
 
-class App extends Component {
-
-  render() {
-    return (
-
-      <BrowserRouter>
-        <Switch>
-        <div className="App">
-          <Route exact path="/" component={HomeComponent} />
-          <div className="container">
-            <Route exact path="/register" component={RegisterComponent} />
-            <Route exact path="/login" component={LoginComponent} />
-            <Route exact path="/profile-user" component={UserComponent} />
-            <Route  exact path="/profile-admin" component={AdminComponent} />
-          </div>
-        </div>
-        </Switch>
-  </BrowserRouter>
-    )
-  }
-}
-
+  return (
+    //<Provider store={store}>
+      <Router>
+        <AuthRoute/>
+        <ProfileRoute/>
+      </Router>
+    //</Provider>
+  );
+};
 export default App

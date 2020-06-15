@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import jwt_decode from 'jwt-decode'
+import React from 'react'
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,21 +8,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { createTicket } from './TicketFunctions'
-import { getTicket } from './TicketFunctions'
-import { removeTicket } from './TicketFunctions'
-import { updateTicket } from './TicketFunctions'
-import { getAllUserTickets } from './TicketFunctions'
-import { getUsers } from './UserFunctions'
+
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from "react-router-dom";
-
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -34,11 +28,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+
+
+import { createTicket, getTicket , removeTicket, updateTicket, getAllUserTickets} from '../../actions/TicketFunctions'
+import { getUsers } from '../../actions/UserFunctions'
+
+
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
@@ -100,7 +96,29 @@ const useStyles = makeStyles((theme) =>({
   }
 }));
 
-function ProfileAdmin() {
+
+
+
+function reducer (state, action) {
+  switch (action.type) {
+    case 'REMOVE_TICKET':
+      removeTicket(action.id)
+      console.log(action.id);
+      return;
+    case 'CREATE_TICKET':
+      createTicket(action.ticket)
+      console.log(action.ticket);
+      return "";
+    case 'UPDATE_TICKET':
+      updateTicket(action.ticket)
+      console.log(action.ticket);
+      return "";
+    default:
+      throw new Error();
+  }
+}
+
+function Admin() {
 
 let history = useHistory();
 
@@ -108,103 +126,86 @@ if(localStorage.getItem('rol')!= 1) history.push("/profile-user");
 
 const classes = useStyles();
 const [rows, setRows] = React.useState([])
-const [open, setOpen] = React.useState(false);
-const [openEdit, setOpenEdit] = React.useState(false);
 const [users, setUsers] = React.useState([]);
-const [issue, setIssue] = React.useState('');
-const [userId, setUserId] = React.useState('');
-const [ticketId, setTicketId] = React.useState('');
 const [update, setUpdate] = React.useState(0);
+const [ticket, setTicket] = React.useState({
+  id:'',
+  issue: '',
+  user_id: ''
+});
+const { issue, user_id} = ticket;
+const [state, dispatch] = React.useReducer(reducer);
 
 React.useEffect(() => {
 
     allUserTickets()
 
-    async function allUserTickets() {
-        getAllUserTickets().then(tickets => {
-
-            console.log(tickets);
-            setRows(tickets)
-        })
+    async function allUserTickets() 
+    {
+      getAllUserTickets().then(tickets => {
+        console.log(tickets);
+        setRows(tickets) })
     }
 
     getUsers().then(users => {
         setUsers(users)
+        console.log(users);
     })
 
 }, [update]);
 
-const setValues = () => {
+//CRUD
 
-    setUserId('')
-    setIssue('')
-    setOpen(false);
-    setOpenEdit(false);
-
-}
-
-const handleClickOpen = () => {
-    setOpen(true);
-};
+const onChange = (e) =>
+    setTicket({ ...ticket, [e.target.name]: e.target.value });
 
 
-const handleClickOpenEdit = (id) => {
-    setOpenEdit(true);
-    getTicket(id).then(ticket => {
-        setTicketId(id)
-        setIssue(ticket.issue)
-        setUserId(ticket.user_id)
-    })
-};
-
-const handleClose = () => {
-    setValues()
-};
-
-const handleCloseEdit = () => {
-    setValues()
-};
-
-const handleCreateTicket = () => {
-
-    const ticket = {
-        issue: issue,
-        user_id: userId
+    const createTicket = () => {
+      dispatch({ type: 'CREATE_TICKET', ticket});
+      setUpdate(update + 1);
+      setTicket({ ticket: '' });
+      modalAddClose();
+    }
+    const removeTicket = (id) => {
+      dispatch({ type: 'REMOVE_TICKET', id});
+      setUpdate(update + 2);
+    }
+    const updateTicket = (id) => {
+      dispatch({ type: 'UPDATE_TICKET', ticket});
+      setUpdate(update + 3);
+      modalEditClose();
     }
 
-    createTicket(ticket)
-    setValues()
-    setUpdate(update + 1);
-};
+//MODAL ADD
 
-const handleRemoveTicket = (id) => {
-    removeTicket(id)
-    setOpen(false)
-    setUpdate(update + 2);
-};
+const [openAdd, setModalAddOpen] = React.useState(false);
 
-const handleEditTicket = (id) => {
+  const modalAddOpen = () => {
+    setModalAddOpen(true);
+  }
 
-    const ticket = {
-        id: ticketId,
-        issue: issue,
-        user_id: userId
-    }
-    console.log(ticket)
-    updateTicket(ticket)
-    setValues()
-    setUpdate(update + 3);
+  const modalAddClose = () => {
+    setModalAddOpen(false);
+  }
 
-};
+//MODAL EDIT
 
-const handleChangeUserId = (event) => {
-    setUserId(event.target.value);
-};
+const [openEdit, setModalEditOpen] = React.useState(false);
 
-const handleChangeIssue = (event) => {
-    setIssue(event.target.value);
-};
-  
+  const modalEditOpen = (id) => {
+
+    setModalEditOpen(true);
+    getTicket(id).then(res => {
+      setTicket({
+        id:res.id,
+        issue: res.issue,
+        user_id: res.user_id
+      })  
+  })}
+
+  const modalEditClose = () => {
+    setModalEditOpen(false);
+  }
 
   return (
     <div>
@@ -221,10 +222,13 @@ const handleChangeIssue = (event) => {
             <TableCell>Apellido</TableCell>
             <TableCell>Creado</TableCell>
             <TableCell className={classes.root}>Estado
+
+              { /** Boton Agregar Ticket */}
               
-              <Fab size="small" className={classes.buttonAdd} color="primary" aria-label="add" onClick={handleClickOpen}>
+              <Fab size="small" className={classes.buttonAdd} color="primary" aria-label="add" onClick={modalAddOpen}>
                 <AddIcon />
               </Fab>
+              
             </TableCell>
           </TableRow>
         </TableHead>
@@ -233,8 +237,8 @@ const handleChangeIssue = (event) => {
               
           <TableRow key={row.id}>
             <TableCell>{row.issue}</TableCell>
-            <TableCell>{row.first_name}</TableCell>
-            <TableCell>{row.last_name}</TableCell>
+            <TableCell>{row.user.first_name}</TableCell>
+            <TableCell>{row.user.last_name}</TableCell>
             <TableCell>{row.created}</TableCell>
             <TableCell>
                   {row.status ? 
@@ -243,12 +247,15 @@ const handleChangeIssue = (event) => {
 
                   
               <span className={classes.divIcon}>
-                <IconButton aria-label="delete" className={classes.margin} size="small" onClick={()=>handleRemoveTicket(row.id)}>
+                <IconButton aria-label="delete" className={classes.margin} size="small" onClick={ ()=> removeTicket(row.id) }>
                   <DeleteIcon fontSize="inherit" />
                 </IconButton>
-                <IconButton aria-label="edit" className={classes.margin} size="small" onClick={()=>handleClickOpenEdit(row.id)}>
+
+                { /** Boton Editar Ticket */}
+                <IconButton aria-label="edit" className={classes.margin} size="small" onClick={()=>modalEditOpen(row.id)}>
                   <EditIcon fontSize="inherit" />
                 </IconButton>
+
               </span>
             </TableCell>
           </TableRow>
@@ -257,15 +264,19 @@ const handleChangeIssue = (event) => {
         </TableBody>
       </Table>
     </TableContainer>
-    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth="600px">
+
+
+
+    { /** Modal Agregar Ticket */}
+    <Dialog open={openAdd} onClose={modalAddClose} aria-labelledby="form-dialog-title" fullWidth="600px">
       <DialogTitle id="form-dialog-title">Agregar Ticket</DialogTitle>
       <DialogContent>
         <TextField
               autoFocus
               margin="dense"
-              id="issue"
+              name="issue"
               value={issue}
-              onChange={handleChangeIssue}
+              onChange={onChange}
               label="Asunto"
               type="text"
               fullWidth
@@ -275,9 +286,9 @@ const handleChangeIssue = (event) => {
         <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
         <Select
             labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={userId}
-            onChange={handleChangeUserId}
+            name="user_id"
+            value={user_id}
+            onChange={onChange}
             className={classes.selectEmpty}>
             {users.map((user) => (
               
@@ -287,23 +298,28 @@ const handleChangeIssue = (event) => {
         </Select>
       </div>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={modalAddClose} color="primary">
             Cancelar
           </Button>
-        <Button onClick={handleCreateTicket} color="primary">
+        <Button onClick={createTicket} color="primary">
             Agregar
           </Button>
       </DialogActions>
     </Dialog>
-    <Dialog open={openEdit} onClose={handleCloseEdit} aria-labelledby="form-dialog-title" fullWidth="600px">
-      <DialogTitle id="form-dialog-title">Editar Ticket</DialogTitle>
+
+    
+
+    
+    { /** Modal Editar Ticket */}
+    <Dialog open={openEdit} onClose={modalEditClose} aria-labelledby="form-dialog-title" fullWidth="600px">
+      <DialogTitle id="form-dialog-title">Agregar Ticket</DialogTitle>
       <DialogContent>
         <TextField
               autoFocus
               margin="dense"
-              id="issue"
+              name="issue"
               value={issue}
-              onChange={handleChangeIssue}
+              onChange={onChange}
               label="Asunto"
               type="text"
               fullWidth
@@ -313,9 +329,9 @@ const handleChangeIssue = (event) => {
         <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
         <Select
             labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={userId}
-            onChange={handleChangeUserId}
+            name="user_id"
+            value={user_id}
+            onChange={onChange}
             className={classes.selectEmpty}>
             {users.map((user) => (
               
@@ -325,14 +341,15 @@ const handleChangeIssue = (event) => {
         </Select>
       </div>
       <DialogActions>
-        <Button onClick={handleCloseEdit} color="primary">
+        <Button onClick={ modalEditClose } color="primary">
             Cancelar
           </Button>
-        <Button onClick={handleEditTicket} color="primary">
-            Actualizar
+        <Button  onClick={ updateTicket } color="primary">
+            Agregar
           </Button>
       </DialogActions>
     </Dialog>
+
   </div>
 </div>
   
@@ -340,4 +357,4 @@ const handleChangeIssue = (event) => {
 
 }
 
-export default ProfileAdmin
+export default Admin

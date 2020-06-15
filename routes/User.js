@@ -9,7 +9,7 @@ route.use(cors())
 route.get('/users', async (req, res) => {
 
 	try{
-		const users= db.user.findAll();
+		const users= await db.user.findAll();
 		res.json(users)
 
 	}catch(err){

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import jwt_decode from 'jwt-decode'
-import { login } from './AuthFunctions'
+import { login } from '../../actions/AuthFunctions'
 import { Field, Form, FormSpy } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
-import { email, required } from './form/validation';
+import { email, required } from '../form/validation';
 import { useHistory } from "react-router-dom";
 import Link from '@material-ui/core/Link';
-import RFTextField from './form/RFTextField';
-import FormButton from './form/FormButton';
-import FormFeedback from './form/FormFeedback';
+import RFTextField from '../form/RFTextField';
+import FormButton from '../form/FormButton';
+import FormFeedback from '../form/FormFeedback';
 import Typography from '@material-ui/core/Typography';
 
 

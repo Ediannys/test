@@ -8,11 +8,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { createTicket } from './TicketFunctions'
-import { getTicket } from './TicketFunctions'
-import { removeTicket } from './TicketFunctions'
-import { updateStatusTicket } from './TicketFunctions'
-import { getUserTickets } from './TicketFunctions'
+
+
+import { createTicket, getTicket, removeTicket, updateStatusTicket, getUserTickets } from './TicketFunctions'
+
+
+
 import { getUsers } from './UserFunctions'
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
