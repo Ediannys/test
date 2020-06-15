@@ -28,6 +28,7 @@ export const register = async (newUser) => {
       email: newUser.email,
       password: newUser.password
     })
+    
     return res.data;
 
   }catch(err){

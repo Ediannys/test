@@ -103,15 +103,12 @@ function reducer (state, action) {
   switch (action.type) {
     case 'REMOVE_TICKET':
       removeTicket(action.id)
-      console.log(action.id);
       return;
     case 'CREATE_TICKET':
       createTicket(action.ticket)
-      console.log(action.ticket);
       return "";
     case 'UPDATE_TICKET':
       updateTicket(action.ticket)
-      console.log(action.ticket);
       return "";
     default:
       throw new Error();
@@ -143,13 +140,11 @@ React.useEffect(() => {
     async function allUserTickets() 
     {
       getAllUserTickets().then(tickets => {
-        console.log(tickets);
         setRows(tickets) })
     }
 
     getUsers().then(users => {
         setUsers(users)
-        console.log(users);
     })
 
 }, [update]);

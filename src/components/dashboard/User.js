@@ -78,11 +78,9 @@ function reducer (state, action) {
     switch (action.type) {
     case 'CREATE_TICKET':
       createTicket(action.ticket)
-      console.log(action.ticket);
       return "";
       case 'UPDATE_STATUS':
         updateStatusTicket(action.ticket)
-        console.log(action.ticket);
         return "";
       default:
         throw new Error();
@@ -125,7 +123,6 @@ React.useEffect(() => {
     async function userTickets() {
         getUserTickets(user.id).then(tickets => {
           if(tickets == []) setShowMessage('block')
-            console.log(tickets);
             setRows(tickets)
         })
     }

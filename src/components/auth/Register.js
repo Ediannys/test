@@ -10,6 +10,8 @@ import RFTextField from '../form/RFTextField';
 import FormButton from '../form/FormButton';
 import FormFeedback from '../form/FormFeedback';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 
@@ -41,6 +43,7 @@ function Register() {
 
   const classes = useStyles();
   const [disabled, setDisabled] = React.useState(true);
+  const [status, setStatus] = React.useState(false);
   let history = useHistory();
 
 
@@ -50,7 +53,6 @@ function Register() {
       const emailError = email(values.email, values);
       if (emailError) {
         errors.email = email(values.email, values);
-        console.log('entro');
         setDisabled(true);
       }
       else setDisabled(false);
@@ -61,7 +63,7 @@ function Register() {
   };
 
   const handleSubmit = (values) => {
-
+    setStatus(true);
     const user = {
       first_name:values.firstName,
       last_name: values.lastName,
@@ -70,7 +72,10 @@ function Register() {
     }
     
     register(user).then(res=>{
+
       if(res){
+        setStatus(false);
+        console.log('recibio a res');
         history.push("/login");
       }
     })
@@ -78,9 +83,11 @@ function Register() {
   };
 
   return (
-    
+   
     <div className={classes.divSigIn}>
+      { status ? <LinearProgress />: <p></p>}
       <Form onSubmit={handleSubmit} subscription={{ submitting: true }} validate={validate}  >
+      
         {({ handleSubmit, values, submitting }) => (
 
 

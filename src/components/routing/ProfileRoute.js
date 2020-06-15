@@ -1,8 +1,22 @@
 import React,{ Fragment} from 'react'
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect   } from 'react-router-dom';
 import Admin from '../dashboard/Admin';
 import User from '../dashboard/User';
 import DynamicLayoutNavbar from '../layout/DynamicLayoutNavbar';
+import { isAuthenticated } from "../../components/auth";
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+      )
+    }
+  />
+);
 
 
 
@@ -13,8 +27,8 @@ const ProfileRoute = () => {
       <DynamicLayoutNavbar layout="PROFILE_NAV"/>
       <section className="container">
         <Switch>
-          <Route exact path="/profile-admin" component={Admin} />
-          <Route exact path="/profile-user" component={User} />
+          <PrivateRoute exact path="/profile-admin" component={Admin} />
+          <PrivateRoute exact path="/profile-user" component={User} />
         </Switch>
       </section>
     </Fragment>

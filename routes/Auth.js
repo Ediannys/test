@@ -32,14 +32,16 @@ route.post('/register', async(req, res) => {
 		})
 
 		if (!user) {
-			bcrypt.hash(req.body.password, 10, async(err, hash) => {
+			bcrypt.hash(req.body.password, 10,(err, hash) => {
 				if (err) throw err;
 				userData.password = hash
-				user = await db.user.create(userData)
-				if (!user) res.json({
-					status: user.email + ' Registered!'
+				db.user.create(userData).then(response=>{
+					console.log('Registered')
+					res.json({
+						succes: 'registered'
+					})
 				})
-
+			
 			})
 		} else {
 			res.json({
