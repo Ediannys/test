@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         marginTop: '10px'
+    },
+    header: {
+        marginTop: '9px'
     }
 }));
 
