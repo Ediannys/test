@@ -18,7 +18,7 @@ Escribir en su explorador la siguiente url [http://localhost:3000](http://localh
 ### `Ejecutar Script sql`
 Activar Wampp o Xampp</br>
 Abrir la consola de MySql</br>
-Escribir la siguiente instrucción, ejemplo: mysql> \.C:/wamp64/www/test/database/db.sql</br>
+Escribir la siguiente instrucción, ejemplo: mysql> SOURCE C:/wamp64/www/test/database/db.sql</br>
 esa es la ruta que yo tengo para ejecutar el script desde mi pc</br>
 
 ### `Datos`

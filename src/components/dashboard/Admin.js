@@ -262,7 +262,7 @@ const [openEdit, setModalEditOpen] = React.useState(false);
 
 
 
-    { /** Modal Agregar Ticket */}
+    { /** Modal Ticket Add */}
     <Dialog open={openAdd} onClose={modalAddClose} aria-labelledby="form-dialog-title" fullWidth="600px">
       <DialogTitle id="form-dialog-title">Agregar Ticket</DialogTitle>
       <DialogContent>
@@ -278,7 +278,7 @@ const [openEdit, setModalEditOpen] = React.useState(false);
             />
       </DialogContent>
       <div>
-        <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
+        <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Usuario</InputLabel>
         <Select
             labelId="demo-simple-select-label"
             name="user_id"
@@ -305,9 +305,9 @@ const [openEdit, setModalEditOpen] = React.useState(false);
     
 
     
-    { /** Modal Editar Ticket */}
+    { /** Modal Ticket Edit */}
     <Dialog open={openEdit} onClose={modalEditClose} aria-labelledby="form-dialog-title" fullWidth="600px">
-      <DialogTitle id="form-dialog-title">Agregar Ticket</DialogTitle>
+      <DialogTitle id="form-dialog-title">Editar Ticket</DialogTitle>
       <DialogContent>
         <TextField
               autoFocus
@@ -321,7 +321,7 @@ const [openEdit, setModalEditOpen] = React.useState(false);
             />
       </DialogContent>
       <div>
-        <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Asunto</InputLabel>
+        <InputLabel className={classes.selectEmpty} id="demo-simple-select-label">Usuario</InputLabel>
         <Select
             labelId="demo-simple-select-label"
             name="user_id"
